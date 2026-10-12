@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f7f4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DayFlow">
+<title>DayFlow · 每日清单</title>
+<style>
+:root{--bg:#f7f7f4;--card:#fff;--ink:#242821;--muted:#858a80;--line:#e9ebe4;--green:#486b50;--green2:#e8efe7;--orange:#b86b39;--orange2:#fbefe5;--red:#b94b46;--shadow:0 8px 28px rgba(37,48,34,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:520px;margin:auto;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 96px)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.brand{font-size:20px;font-weight:800;letter-spacing:-.5px}.brand span{color:var(--green)}.date-label{font-size:12px;color:var(--muted);margin-top:4px}.icon-btn{border:0;background:#fff;border-radius:14px;width:42px;height:42px;box-shadow:var(--shadow);font-size:18px}
+.greeting{font-size:25px;line-height:1.35;font-weight:750;letter-spacing:-.7px;margin:4px 0 5px}.subtitle{font-size:13px;color:var(--muted);margin-bottom:19px}
+.summary{background:var(--green);color:white;border-radius:22px;padding:18px 19px;margin-bottom:18px;box-shadow:var(--shadow)}.sum-top{display:flex;justify-content:space-between;align-items:center}.sum-title{font-size:13px;opacity:.85}.percent{font-size:29px;font-weight:800;letter-spacing:-1px}.progress{height:6px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden;margin:12px 0 11px}.progress>div{height:100%;background:#fff;border-radius:99px;width:0;transition:width .2s}.sum-bottom{display:flex;justify-content:space-between;font-size:12px;opacity:.88}
+.quick-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}.stat{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:13px 14px}.stat .label{font-size:11px;color:var(--muted)}.stat .value{font-size:19px;font-weight:750;margin-top:5px}.stat .hint{font-size:11px;color:var(--muted);margin-top:3px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 1px 12px}.section-head h2{font-size:16px;margin:0;font-weight:800}.small-muted{font-size:11px;color:var(--muted)}
+.add-row{display:flex;gap:9px;margin-bottom:13px}.add-input{flex:1;min-width:0;border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px 14px;outline:none;box-shadow:0 2px 9px rgba(37,48,34,.02)}.add-input:focus{border-color:#9caf9b}.add-btn{border:0;background:var(--green);color:#fff;border-radius:15px;width:50px;font-size:24px;font-weight:400}
+.tools-row{display:flex;gap:7px;overflow:auto;padding-bottom:3px;scrollbar-width:none}.chip{white-space:nowrap;border:1px solid var(--line);background:#fff;color:#73796f;padding:8px 12px;border-radius:99px;font-size:12px}.chip.active{background:var(--green2);border-color:var(--green2);color:var(--green);font-weight:700}
+.task-list{display:flex;flex-direction:column;gap:9px}.task{display:flex;gap:11px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px 12px;box-shadow:0 3px 10px rgba(37,48,34,.025)}.task.done{opacity:.67}.check{flex:0 0 23px;height:23px;border-radius:50%;border:1.5px solid #c8cec3;background:white;display:grid;place-items:center;margin-top:1px;color:white;font-size:13px}.task.done .check{background:var(--green);border-color:var(--green)}.task-body{flex:1;min-width:0}.task-title{font-size:14px;line-height:1.45;font-weight:650;overflow-wrap:anywhere}.task.done .task-title{text-decoration:line-through;color:#7f857b}.task-meta{font-size:11px;color:var(--muted);margin-top:5px;display:flex;gap:8px;flex-wrap:wrap}.badge{display:inline-block;border-radius:7px;padding:3px 6px;font-size:10px;font-weight:700}.badge.todo{background:#f0f1ed;color:#777e73}.badge.done{background:var(--green2);color:var(--green)}.badge.late{background:var(--orange2);color:var(--orange)}.task-actions{display:flex;gap:5px;align-items:center}.dots{border:0;background:transparent;color:#9da297;font-size:20px;padding:0 3px}.empty{padding:27px 15px;text-align:center;color:var(--muted);font-size:13px;background:#fff;border:1px dashed var(--line);border-radius:17px}.empty b{display:block;color:#555c51;margin-bottom:5px}
+.settle-card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:16px;margin-top:20px}.settle-title{font-weight:800;font-size:14px}.settle-desc{font-size:12px;line-height:1.6;color:var(--muted);margin:7px 0 13px}.settle-row{display:flex;gap:8px}.secondary,.primary{border-radius:12px;padding:11px 13px;font-size:12px;font-weight:700;border:1px solid var(--line);background:#fff;color:var(--ink)}.primary{background:var(--green);color:white;border-color:var(--green);flex:1}
+.nav{position:fixed;bottom:0;left:0;right:0;padding:10px 18px calc(env(safe-area-inset-bottom) + 9px);background:rgba(247,247,244,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(220,224,215,.75);z-index:5}.nav-inner{max-width:520px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.nav button{border:0;background:transparent;color:#969b91;font-size:11px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:4px}.nav button .ico{font-size:19px;line-height:1.1}.nav button.active{color:var(--green);font-weight:800}
+.page{display:none}.page.active{display:block}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:11px}.panel h3{font-size:14px;margin:0 0 10px}.panel p{font-size:12px;line-height:1.65;color:var(--muted);margin:5px 0}.field{display:flex;flex-direction:column;gap:6px;margin:12px 0}.field label{font-size:12px;color:#73796f}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fcfcfa;outline:none;color:var(--ink)}.field textarea{min-height:74px;resize:vertical}.form-actions{display:flex;gap:8px;margin-top:14px}.form-actions button{flex:1}.history-item{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}.history-item:last-child{border-bottom:0}.money{color:var(--red);font-weight:800}.toast{position:fixed;z-index:10;bottom:90px;left:50%;transform:translateX(-50%);background:#242821;color:#fff;padding:11px 16px;border-radius:99px;font-size:12px;box-shadow:var(--shadow);max-width:90vw;white-space:nowrap;display:none}.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(20,25,19,.32);z-index:20;align-items:flex-end;justify-content:center;padding:12px}.modal-backdrop.show{display:flex}.modal{background:var(--bg);width:100%;max-width:520px;border-radius:24px 24px 18px 18px;padding:20px 18px calc(env(safe-area-inset-bottom) + 18px);max-height:90dvh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin-bottom:9px}.close{border:0;background:#e9ebe4;border-radius:50%;width:30px;height:30px}.modal .primary{width:100%;padding:13px}.warning{background:#fbefe5;border-radius:12px;padding:10px;font-size:12px;color:#9a5a30;line-height:1.5;margin:12px 0}
+@media(min-width:600px){body{padding:18px 0}.app{background:var(--bg)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div><div class="brand">Day<span>Flow</span></div><div class="date-label" id="todayLabel"></div></div>
+    <button class="icon-btn" id="settingsBtn" aria-label="设置">⚙</button>
+  </header>
+
+  <main id="homePage" class="page active">
+    <div class="greeting" id="greeting">把今天，过得简单一点。</div>
+    <div class="subtitle">不用完美，只要一件一件完成。</div>
+    <section class="summary">
+      <div class="sum-top"><div class="sum-title">今日完成率</div><div class="percent" id="percent">0%</div></div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="sum-bottom"><span id="countText">完成 0 / 0 项</span><span id="leftText">还有 0 项待办</span></div>
+    </section>
+    <div class="quick-stats">
+      <div class="stat"><div class="label">今日虚拟罚款</div><div class="value" id="todayFine">¥0</div><div class="hint">23:30 结算后更新</div></div>
+      <div class="stat"><div class="label">累计虚拟罚款</div><div class="value" id="totalFine">¥0</div><div class="hint" id="streakHint">从小事开始</div></div>
+    </div>
+    <div class="section-head"><h2>今天要做的事</h2><span class="small-muted" id="taskDateHint">按优先顺序</span></div>
+    <form class="add-row" id="quickForm"><input class="add-input" id="quickTitle" placeholder="记一件待办，回车即可添加…" maxlength="120" autocomplete="off"><button class="add-btn" aria-label="添加任务">＋</button></form>
+    <div class="tools-row" id="filters">
+      <button class="chip active" data-filter="all">全部</button><button class="chip" data-filter="todo">未完成</button><button class="chip" data-filter="done">已完成</button><button class="chip" data-filter="late">已延期</button>
+    </div>
+    <div class="task-list" id="taskList" style="margin-top:11px"></div>
+    <section class="settle-card">
+      <div class="settle-title">🌙 今日结算 · 23:30</div>
+      <div class="settle-desc" id="settleDesc">每天 23:30 结算当天未完成任务，每项计入 ¥5 虚拟罚款。打开网页时会检查是否漏结算。</div>
+      <div class="settle-row"><button class="primary" id="settleBtn">现在结算</button><button class="secondary" id="settleHistoryBtn">结算记录</button></div>
+    </section>
+  </main>
+
+  <main id="calendarPage" class="page">
+    <div class="greeting">任务日历</div><div class="subtitle">按日期查看安排，轻点日期就能查看或添加任务。</div>
+    <div class="panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px">
+        <button class="secondary" id="prevMonth">‹ 上个月</button><strong id="monthLabel"></strong><button class="secondary" id="nextMonth">下个月 ›</button>
+      </div>
+      <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center"></div>
+      <div class="small-muted" style="margin-top:12px">有圆点表示当天有任务；绿色日期为当前选中日期。</div>
+    </div>
+    <div class="section-head"><h2 id="selectedDateTitle">当天任务</h2><button class="secondary" id="addSelectedDate">＋ 添加任务</button></div>
+    <div class="task-list" id="calendarTaskList"></div>
+  </main>
+
+  <main id="historyPage" class="page">
+    <div class="greeting">结算记录</div><div class="subtitle">看见自己的节奏，不必责备自己。</div>
+    <div class="quick-stats"><div class="stat"><div class="label">累计虚拟罚款</div><div class="value" id="historyTotal">¥0</div><div class="hint">不涉及真实扣款</div></div><div class="stat"><div class="label">已结算天数</div><div class="value" id="settledDays">0</div><div class="hint">包含零罚款的日期</div></div></div>
+    <div class="panel"><h3>本周总结</h3><div id="weeklySummary"></div></div>
+    <div class="panel"><h3>历史结算</h3><div id="historyList"></div></div>
+    <div class="panel"><h3>结算规则</h3><p>每天 23:30 对当天仍未完成的任务进行结算，每条计入 ¥5。标记为「延期」的任务也视为当天未完成，会计入当日虚拟罚款；如果你希望延期不罚款，可在设置中调整规则。</p></div>
+  </main>
+
+  <main id="settingsPage" class="page">
+    <div class="greeting">轻量设置</div><div class="subtitle">只保留真正有用的东西。</div>
+    <div class="panel">
+      <h3>结算规则</h3>
+      <div class="field"><label for="fineAmount">每条未完成任务罚款（虚拟金额）</label><input id="fineAmount" type="number" min="0" step="1" value="5"></div>
+      <div class="field"><label for="settleTime">每日结算时间</label><input id="settleTime" type="time" value="23:30"></div>
+      <div class="field"><label for="lateFine">延期任务是否计入罚款</label><select id="lateFine"><option value="yes">计入罚款（推荐）</option><option value="no">不计入罚款</option></select></div>
+      <button class="primary" id="saveSettings">保存设置</button>
+    </div>
+    <div class="panel">
+      <h3>数据与隐私</h3><p>所有任务和记录仅保存在当前浏览器的本地存储中，不会自动上传服务器。清除 Safari 网站数据或更换浏览器可能导致数据丢失，建议定期导出备份。</p>
+      <div class="form-actions"><button class="secondary" id="exportBtn">导出备份</button><button class="secondary" id="importBtn">导入备份</button></div><input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+    <div class="panel">
+      <h3>iPhone 使用小贴士</h3><p>如果通过 HTTPS 网页地址打开，可在 Safari 点「分享」→「添加到主屏幕」，以后像 App 一样点图标打开。普通网页无法直接创建真正的 iOS 主屏幕交互小组件；添加到主屏幕是最省事的替代方式。</p><p>提醒通知需网页获得通知权限，而且 iOS 对后台运行有限制。本版本优先保证任务清单、状态、结算和本地数据可用。</p>
+    </div>
+    <div class="panel"><h3>危险操作</h3><button class="secondary" id="clearBtn" style="color:var(--red)">清空全部任务与记录</button></div>
+  </main>
+</div>
+
+<nav class="nav"><div class="nav-inner">
+<button class="active" data-page="homePage"><span class="ico">☷</span>今日清单</button>
+<button data-page="calendarPage"><span class="ico">▦</span>日历</button>
+<button data-page="historyPage"><span class="ico">◷</span>结算统计</button>
+<button data-page="settingsPage"><span class="ico">⚙</span>设置</button>
+</div></nav>
+<div class="toast" id="toast"></div>
+
+<div class="modal-backdrop" id="taskModal">
+ <div class="modal">
+  <div class="modal-head"><span id="modalTitle">新建任务</span><button class="close" id="closeModal">×</button></div>
+  <form id="taskForm">
+   <input type="hidden" id="editId">
+   <div class="field"><label for="taskTitle">任务内容 *</label><input id="taskTitle" required maxlength="120" placeholder="例如：读论文 30 分钟"></div>
+   <div class="field"><label for="taskDate">日期</label><input id="taskDate" type="date" required></div>
+   <div class="field"><label for="taskTime">时间（可选）</label><input id="taskTime" type="time"></div>
+   <div class="field"><label for="taskNote">备注（可选）</label><textarea id="taskNote" maxlength="500" placeholder="补充一点说明…"></textarea></div>
+   <div class="field"><label for="taskPriority">优先级</label><select id="taskPriority"><option value="normal">普通</option><option value="high">重要</option><option value="low">有空再做</option></select></div>
+   <div class="form-actions"><button type="button" class="secondary" id="cancelTask">取消</button><button type="submit" class="primary">保存任务</button></div>
+  </form>
+ </div>
+</div>
+<script>
+const KEY='dayflow_v1_data';
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const fmtDate=d=>{if(!d)return '';const x=new Date(d+'T12:00:00');return `${x.getMonth()+1}月${x.getDate()}日`};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+let state={tasks:[],settlements:[],settings:{fine:5,time:'23:30',lateFine:'yes'}};
+let filter='all';\nlet selectedCalendarDate=today();\nlet calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const v=JSON.parse(raw);state={...state,...v,settings:{...state.settings,...(v.settings||{})}}}}catch(e){}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function toast(s){const t=document.getElementById('toast');t.textContent=s;t.style.display='block';clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>t.style.display='none',2200)}
+function tasksForDay(d=today()){return state.tasks.filter(t=>t.date===d)}
+function settlementFor(d){return state.settlements.find(s=>s.date===d)}
+function isCountedUnfinished(t){return t.status!=='done'&&(t.status!=='late'||state.settings.lateFine==='yes')}
+function getFine(d){const s=settlementFor(d);return s?s.fine:0}
+function totalFine(){return state.settlements.reduce((n,s)=>n+s.fine,0)}
+function checkSettlement(){const now=new Date();const time=state.settings.time||'23:30';const [h,m]=time.split(':').map(Number);const cutoff=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m);if(now>=cutoff&&!settlementFor(today())){settle(today(),true)}}
+function settle(d,automatic=false){if(settlementFor(d)){if(!automatic)toast('这一天已经结算过了');return}
+ const ts=tasksForDay(d);const unfinished=ts.filter(isCountedUnfinished);const s={id:uid(),date:d,at:new Date().toISOString(),fine:unfinished.length*Number(state.settings.fine||0),unfinished:unfinished.map(t=>({id:t.id,title:t.title,status:t.status})),total:ts.length,completed:ts.filter(t=>t.status==='done').length};
+ state.settlements.push(s);save();render();if(!automatic){toast(`结算完成：${unfinished.length} 项未完成，虚拟罚款 ¥${s.fine}`);if(unfinished.length&&confirm(`今天有 ${unfinished.length} 项未完成。要把它们全部移到明天吗？`)){unfinished.forEach(u=>{const t=state.tasks.find(x=>x.id===u.id);if(t){t.date=nextDay(d);t.status='todo'}});save();render();toast('未完成任务已移到明天')}}}
+function render(){const d=today();document.getElementById('todayLabel').textContent=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});const ts=tasksForDay(d);const done=ts.filter(t=>t.status==='done').length;const pct=ts.length?Math.round(done/ts.length*100):0;document.getElementById('percent').textContent=pct+'%';document.getElementById('progressBar').style.width=pct+'%';document.getElementById('countText').textContent=`完成 ${done} / ${ts.length} 项`;document.getElementById('leftText').textContent=`还有 ${ts.length-done} 项待办`;document.getElementById('todayFine').textContent='¥'+getFine(d);document.getElementById('totalFine').textContent='¥'+totalFine();document.getElementById('historyTotal').textContent='¥'+totalFine();document.getElementById('settledDays').textContent=state.settlements.length;document.getElementById('streakHint').textContent=state.settlements.length?`已记录 ${state.settlements.length} 次结算`:'完成一件，也算进步';document.getElementById('settleDesc').textContent=settlementFor(d)?`今日已结算：${settlementFor(d).unfinished.length} 项未完成，虚拟罚款 ¥${settlementFor(d).fine}。`:`每天 ${state.settings.time} 结算当天未完成任务，每项 ¥${state.settings.fine} 虚拟罚款。打开网页时会检查是否漏结算。`;
+ const list=document.getElementById('taskList');let visible=ts.filter(t=>filter==='all'||t.status===filter).sort((a,b)=>priorityRank(a.priority)-priorityRank(b.priority)||(a.time||'99:99').localeCompare(b.time||'99:99')||a.created-b.created);list.innerHTML='';
+ if(!visible.length){list.innerHTML='<div class="empty"><b>'+(ts.length?'没有符合条件的任务':'今天还没有任务')+'</b>'+(ts.length?'换个筛选条件试试。':'先记下一件小事，剩下的慢慢来。')+'</div>'}
+ visible.forEach(t=>{const el=document.createElement('div');el.className='task '+(t.status==='done'?'done':'');const status=t.status==='done'?'<span class="badge done">已完成</span>':t.status==='late'?'<span class="badge late">已延期</span>':'<span class="badge todo">未完成</span>';const pr=t.priority==='high'?' · 重要':t.priority==='low'?' · 有空再做':'';el.innerHTML=`<button class="check" aria-label="切换完成状态">${t.status==='done'?'✓':''}</button><div class="task-body"><div class="task-title"></div><div class="task-meta">${t.time?`<span>◷ ${t.time}</span>`:''}<span>${status}</span>${pr?`<span>${pr}</span>`:''}</div>${t.note?`<div class="task-meta"></div>`:''}</div><div class="task-actions"><button class="dots" aria-label="更多操作">⋯</button></div>`;el.querySelector('.task-title').textContent=t.title;if(t.note){const n=el.querySelectorAll('.task-meta')[1];n.textContent=t.note;n.style.lineHeight='1.5'}el.querySelector('.check').onclick=()=>{t.status=t.status==='done'?'todo':'done';t.updated=Date.now();save();render()};el.querySelector('.dots').onclick=()=>openTaskMenu(t);list.appendChild(el)});
+ const hist=document.getElementById('historyList');hist.innerHTML='';const ss=[...state.settlements].sort((a,b)=>b.date.localeCompare(a.date));if(!ss.length)hist.innerHTML='<div class="empty">还没有结算记录。每天到结算时间后，打开网页就会自动补结算。</div>';ss.forEach(s=>{const row=document.createElement('div');row.className='history-item';const left=document.createElement('div');left.innerHTML=`<strong>${fmtDate(s.date)}</strong><div class="small-muted" style="margin-top:5px">完成 ${s.completed}/${s.total} 项 · ${s.unfinished.length} 项计入罚款</div>`;const right=document.createElement('div');right.className='money';right.textContent='¥'+s.fine;row.append(left,right);hist.appendChild(row)});
+
+ // 日历视图
+ const monthLabel=document.getElementById('monthLabel');
+ if(monthLabel){
+   monthLabel.textContent=`${calendarMonth.getFullYear()}年${calendarMonth.getMonth()+1}月`;
+   const grid=document.getElementById('calendarGrid'); grid.innerHTML='';
+   ['一','二','三','四','五','六','日'].forEach(x=>{const e=document.createElement('div');e.textContent=x;e.style.cssText='font-size:11px;color:#858a80;padding:5px 0';grid.appendChild(e)});
+   const first=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth(),1);
+   const offset=(first.getDay()+6)%7; const days=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,0).getDate();
+   for(let i=0;i<offset;i++){const blank=document.createElement('div');grid.appendChild(blank)}
+   for(let day=1;day<=days;day++){
+     const ds=`${calendarMonth.getFullYear()}-${String(calendarMonth.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+     const count=state.tasks.filter(t=>t.date===ds).length;
+     const b=document.createElement('button');b.type='button';b.textContent=day;
+     b.style.cssText=`position:relative;border:0;border-radius:12px;min-height:39px;background:${ds===selectedCalendarDate?'#486b50':ds===today()?'#e8efe7':'transparent'};color:${ds===selectedCalendarDate?'white':ds===today()?'#486b50':'#242821'};font-weight:${ds===selectedCalendarDate||ds===today()?'800':'500'};`;
+     if(count){const dot=document.createElement('span');dot.style.cssText=`position:absolute;bottom:4px;left:calc(50% - 2px);width:4px;height:4px;border-radius:50%;background:${ds===selectedCalendarDate?'white':'#b86b39'}`;b.appendChild(dot)}
+     b.onclick=()=>{selectedCalendarDate=ds;render()};grid.appendChild(b);
+   }
+   document.getElementById('selectedDateTitle').textContent=`${fmtDate(selectedCalendarDate)} · ${state.tasks.filter(t=>t.date===selectedCalendarDate).length} 项任务`;
+   const cl=document.getElementById('calendarTaskList');cl.innerHTML='';
+   const cts=state.tasks.filter(t=>t.date===selectedCalendarDate).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+   if(!cts.length)cl.innerHTML='<div class="empty"><b>这一天还没有任务</b>可以直接添加，或回到今日清单快速记录。</div>';
+   cts.forEach(t=>{const row=document.createElement('div');row.className='task '+(t.status==='done'?'done':'');row.innerHTML=`<button class="check">${t.status==='done'?'✓':''}</button><div class="task-body"><div class="task-title"></div><div class="task-meta">${t.time?`◷ ${t.time} · `:''}${t.status==='done'?'已完成':t.status==='late'?'已延期':'未完成'}</div></div><button class="dots">⋯</button>`;row.querySelector('.task-title').textContent=t.title;row.querySelector('.check').onclick=()=>{t.status=t.status==='done'?'todo':'done';save();render()};row.querySelector('.dots').onclick=()=>openTaskMenu(t);cl.appendChild(row)});
+ }
+ // 本周总结
+ const ws=document.getElementById('weeklySummary');
+ if(ws){
+   const now=new Date(); const monday=new Date(now); monday.setHours(12,0,0,0); monday.setDate(now.getDate()-((now.getDay()+6)%7));
+   const weekDates=[];for(let i=0;i<7;i++){const x=new Date(monday);x.setDate(monday.getDate()+i);weekDates.push(`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`)}
+   const wTasks=state.tasks.filter(t=>weekDates.includes(t.date));const wDone=wTasks.filter(t=>t.status==='done').length;
+   const wFine=state.settlements.filter(s=>weekDates.includes(s.date)).reduce((n,s)=>n+s.fine,0);
+   const overdue=wTasks.filter(t=>t.status==='late').length;
+   ws.innerHTML=`<div class="quick-stats" style="margin-bottom:0"><div class="stat"><div class="label">本周任务</div><div class="value">${wTasks.length}</div></div><div class="stat"><div class="label">完成率</div><div class="value">${wTasks.length?Math.round(wDone/wTasks.length*100):0}%</div></div><div class="stat"><div class="label">本周虚拟罚款</div><div class="value">¥${wFine}</div></div><div class="stat"><div class="label">延期中的任务</div><div class="value">${overdue}</div></div></div><p style="margin-top:12px">${wTasks.length?`本周已完成 ${wDone} 项。${overdue?`目前有 ${overdue} 项延期任务，建议拆小或重新安排。`:'保持适合自己的节奏。'}`:'本周还没有安排任务，先从一两件重要的事开始。'}</p>`;
+ }
+
+ document.getElementById('fineAmount').value=state.settings.fine;document.getElementById('settleTime').value=state.settings.time;document.getElementById('lateFine').value=state.settings.lateFine;
+}
+function priorityRank(p){return p==='high'?0:p==='normal'?1:2}
+function openModal(t=null){document.getElementById('taskModal').classList.add('show');document.getElementById('editId').value=t?t.id:'';document.getElementById('modalTitle').textContent=t?'编辑任务':'新建任务';document.getElementById('taskTitle').value=t?t.title:'';document.getElementById('taskDate').value=t?t.date:today();document.getElementById('taskTime').value=t?t.time||'':'';document.getElementById('taskNote').value=t?t.note||'':'';document.getElementById('taskPriority').value=t?t.priority||'normal':'normal';setTimeout(()=>document.getElementById('taskTitle').focus(),100)}
+function closeModal(){document.getElementById('taskModal').classList.remove('show')}
+function openTaskMenu(t){const action=prompt(`「${t.title}」\n输入数字选择：\n1 编辑任务\n2 标记未完成\n3 标记延期（移至明天）\n4 删除任务\n5 复制到明天`);if(action==='1')openModal(t);else if(action==='2'){t.status='todo';save();render()}else if(action==='3'){const d=prompt('延期到哪一天？请输入 YYYY-MM-DD。\n例如：'+nextDay(t.date),nextDay(t.date));if(d&&/^\\d{4}-\\d{2}-\\d{2}$/.test(d)){t.status='todo';t.originalDate=t.originalDate||t.date;t.date=d;save();render();toast('已延期至 '+d)}}else if(action==='4'){if(confirm('确定删除这条任务？')){state.tasks=state.tasks.filter(x=>x.id!==t.id);save();render()}}else if(action==='5'){state.tasks.push({...t,id:uid(),date:nextDay(t.date),status:'todo',created:Date.now(),note:t.note||''});save();render();toast('已复制到明天')}}
+function nextDay(d){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+1);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`}
+document.getElementById('quickForm').addEventListener('submit',e=>{e.preventDefault();const input=document.getElementById('quickTitle');const title=input.value.trim();if(!title)return;state.tasks.push({id:uid(),title,date:today(),time:'',note:'',priority:'normal',status:'todo',created:Date.now()});input.value='';save();render();toast('已添加到今日清单')});
+document.getElementById('taskForm').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('editId').value;const data={title:document.getElementById('taskTitle').value.trim(),date:document.getElementById('taskDate').value,time:document.getElementById('taskTime').value,note:document.getElementById('taskNote').value.trim(),priority:document.getElementById('taskPriority').value};if(!data.title||!data.date)return;if(id){const t=state.tasks.find(x=>x.id===id);Object.assign(t,data);if(t.status==='late')t.status='todo'}else state.tasks.push({...data,id:uid(),status:'todo',created:Date.now()});save();closeModal();render();toast(id?'任务已更新':'任务已创建')});
+document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render()});
+document.getElementById('settleBtn').onclick=()=>{if(!confirm(`现在结算今天吗？每条符合规则的未完成任务计入 ¥${state.settings.fine} 虚拟罚款。结算后不能重复结算。`))return;settle(today())};
+document.getElementById('settleHistoryBtn').onclick=()=>switchPage('historyPage');
+document.getElementById('settingsBtn').onclick=()=>switchPage('settingsPage');
+document.getElementById('prevMonth').onclick=()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);render()};
+document.getElementById('nextMonth').onclick=()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);render()};
+document.getElementById('addSelectedDate').onclick=()=>{openModal();document.getElementById('taskDate').value=selectedCalendarDate};
+document.getElementById('closeModal').onclick=closeModal;document.getElementById('cancelTask').onclick=closeModal;document.getElementById('taskModal').addEventListener('click',e=>{if(e.target.id==='taskModal')closeModal()});
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchPage(b.dataset.page));
+function switchPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});render()}
+document.getElementById('saveSettings').onclick=()=>{const fine=Math.max(0,Number(document.getElementById('fineAmount').value)||0);const time=document.getElementById('settleTime').value||'23:30';state.settings={fine,time,lateFine:document.getElementById('lateFine').value};save();render();toast('设置已保存')};
+document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`DayFlow-备份-${today()}.json`;a.click();URL.revokeObjectURL(a.href);toast('备份文件已导出')};
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const v=JSON.parse(await f.text());if(!Array.isArray(v.tasks)||!Array.isArray(v.settlements))throw new Error();if(!confirm('导入会覆盖当前本地数据，确定继续吗？'))return;state={...state,...v,settings:{...state.settings,...v.settings}};save();render();toast('备份已导入')}catch(err){alert('备份文件无效，无法导入')}e.target.value=''};
+document.getElementById('clearBtn').onclick=()=>{if(confirm('确定清空所有任务、结算记录和设置吗？此操作无法撤销。')){state={tasks:[],settlements:[],settings:{fine:5,time:'23:30',lateFine:'yes'}};save();render();toast('已清空')}};
+load();checkSettlement();render();
+</script>
+</body>
+</html>
